@@ -358,7 +358,6 @@ public class ConsultaBD {
             if (rs.next()) {
                 // Crear un arreglo de strings para almacenar los valores encontrados
                 String[] valoresEstudiante = new String[7];
-
                 // Obtener los valores de las columnas y guardarlos en el arreglo
                 valoresEstudiante[0] = rs.getString("cedula");
                 valoresEstudiante[1] = rs.getString("nombre");
@@ -369,6 +368,8 @@ public class ConsultaBD {
                 valoresEstudiante[6] = rs.getString("EstadoID");
 
                 return valoresEstudiante;
+            } else {
+                return null; // No se encontró ningún estudiante
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -383,8 +384,7 @@ public class ConsultaBD {
                 e.printStackTrace();
             }
         }
-
-        return null; // No se encontró ningún estudiante
+        return null;
     }
 
     /**

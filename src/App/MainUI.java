@@ -3,7 +3,7 @@ package App;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import ConnectionBD.ConsultaBD;
-import Reportes.MenuReportes;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,7 +37,6 @@ public class MainUI extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        generarReporte = new javax.swing.JButton();
         Nombre = new javax.swing.JTextField();
         Apellido = new javax.swing.JTextField();
         Edad = new javax.swing.JTextField();
@@ -95,15 +94,6 @@ public class MainUI extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cedula del estudiante:");
-
-        generarReporte.setBackground(new java.awt.Color(153, 153, 255));
-        generarReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        generarReporte.setText("Reporte");
-        generarReporte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generarReporteActionPerformed(evt);
-            }
-        });
 
         Nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -244,9 +234,8 @@ public class MainUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Nuevo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Eliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Modificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Agregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(generarReporte, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Modificar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                    .addComponent(Agregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -294,9 +283,7 @@ public class MainUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Eliminar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Nuevo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(generarReporte)))
+                        .addComponent(Nuevo)))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -648,7 +635,6 @@ public class MainUI extends javax.swing.JFrame {
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
         // Obtener el valor de la cédula del campo de búsqueda
         String cedula = buscarCedula.getText();
-
         // Validar la longitud de la cédula
         if (cedula.length() != 8) {
             JOptionPane.showMessageDialog(null, "La cédula debe tener exactamente 8 dígitos", "Error", JOptionPane.ERROR_MESSAGE);
@@ -658,9 +644,8 @@ public class MainUI extends javax.swing.JFrame {
 
             // Buscar los datos del estudiante por cédula
             String[] valoresEstudianteEncontrado = consulta.buscarEstudiantePorCedula(cedula);
-
             // Verificar si se encontraron datos del estudiante
-            if (valoresEstudianteEncontrado != null) {
+            if (valoresEstudianteEncontrado[0] != null) {
                 // Actualizar los campos con los datos del estudiante
                 Nombre.setText(valoresEstudianteEncontrado[1]);
                 Apellido.setText(valoresEstudianteEncontrado[2]);
@@ -669,9 +654,12 @@ public class MainUI extends javax.swing.JFrame {
                 Documento.setSelectedIndex(Integer.parseInt(valoresEstudianteEncontrado[5]) - 1);
                 EstadoCivil.setSelectedIndex(Integer.parseInt(valoresEstudianteEncontrado[4]) - 1);
                 Estado.setSelectedIndex(Integer.parseInt(valoresEstudianteEncontrado[6]) - 1);
+                buscarCedula.setText("");
             } else {
                 // Mostrar mensaje si no se encontró ningún estudiante
                 JOptionPane.showMessageDialog(null, "No se encontró ningún estudiante con la cédula especificada.", "Error", JOptionPane.ERROR_MESSAGE);
+                buscarCedula.setText("");
+
             }
         }
     }//GEN-LAST:event_BuscarActionPerformed
@@ -697,16 +685,6 @@ public class MainUI extends javax.swing.JFrame {
             evt.consume(); // Consume el evento para evitar que se ingresen más caracteres
         }
     }//GEN-LAST:event_buscarCedulaKeyTyped
-    /**
-     * Maneja el evento de acción para generar un reporte.
-     *
-     * @param evt El evento de acción que se ha producido.
-     */
-    private void generarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporteActionPerformed
-        MenuReportes dialog = new MenuReportes(this, true); // Crear un diálogo modal de reportes
-        dialog.setLocationRelativeTo(this); // Centrar el diálogo respecto a la ventana principal
-        dialog.setVisible(true); // Mostrar el diálogo
-    }//GEN-LAST:event_generarReporteActionPerformed
 
     /**
      * Selecciona un ítem en un JComboBox basado en el valor deseado.
@@ -756,7 +734,6 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JButton Nuevo;
     private javax.swing.JButton Salir;
     private javax.swing.JTextField buscarCedula;
-    private javax.swing.JButton generarReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
